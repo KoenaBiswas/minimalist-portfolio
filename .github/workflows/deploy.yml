@@ -1,0 +1,38 @@
+name: Deploy Minimalist Portfolio
+
+# Trigger workflow on push to main branch
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    name: Deploy to GitHub Pages
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1️⃣ Checkout the code
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2️⃣ Set up Node.js (optional, for npm builds)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+
+      # 3️⃣ Install dependencies (if any)
+      - name: Install dependencies
+        run: npm install || echo "No dependencies to install"
+
+      # 4️⃣ Build project (optional, if you have a build step)
+      - name: Build project
+        run: npm run build || echo "No build step"
+
+      # 5️⃣ Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./       # replace with ./dist if your build outputs there
